@@ -1,7 +1,6 @@
 const Discord = require('discord.js')
-const config = require('./config.json')
 const bot = new Discord.Client()
-var prefix = config.prefix
+var prefix = process.env.prefix
 var singleChannelId = ''
 var rrChannelId = '689786890861281280'
 var logChannel = '689553063589052523'
@@ -241,4 +240,4 @@ function settings(args, message) {
   }
 }
 
-bot.login(config.token)
+bot.login(process.env.TOKEN)

@@ -2,10 +2,12 @@ const Discord = require('discord.js')
 const config = require('./config.json')
 const bot = new Discord.Client()
 var prefix = process.env.prefix
+//var prefix = config.prefixv
 var singleChannelId = ''
-var logChannel = ''
+var logChannel = '689773741047414815'
 var vvID = ''
 var botMasters = [process.env.ownerID]
+//var botMasters = [config.ownerid]
 var botMasterRoles = []
 var overwrites = ["clear"]
 
@@ -55,57 +57,57 @@ bot.on('messageReactionAdd', (messageReaction, user) => {
   if(!messageReaction.channel === logChannel) return
   if(messageReaction.emoji.name != "✅") return
 
-  var member = messageReaction.message.guild.members.find(member => member.id === user.id)
+  var member = messageReaction.message.guild.members.cache.find(member => member.id === user.id)
   if(member) {
     var profielRole = false
-    if(member.roles.find(role => role.id === '689773485395804205')) profielRole = true
-    if(member.roles.find(role => role.id === '689773506547810378')) profielRole = true
-    if(member.roles.find(role => role.id === '689773519759867952')) profielRole = true
-    if(member.roles.find(role => role.id === '689773530103021612')) profielRole = true
+    if(member.roles.cache.find(role => role.id === '689773485395804205')) profielRole = true
+    if(member.roles.cache.find(role => role.id === '689773506547810378')) profielRole = true
+    if(member.roles.cache.find(role => role.id === '689773519759867952')) profielRole = true
+    if(member.roles.cache.find(role => role.id === '689773530103021612')) profielRole = true
     if(!profielRole) {
       user.send("Je hebt geen profiel geselecteerd")
       return
     }
 
     var klasRole = false
-    if(member.roles.find(role => role.id === '689809587754631243')) klasRole = true
-    if(member.roles.find(role => role.id === '689809540723900438')) klasRole = true
-    if(member.roles.find(role => role.id === '689809498571014164')) klasRole = true
-    if(member.roles.find(role => role.id === '689809457965826180')) klasRole = true
-    if(member.roles.find(role => role.id === '689809327913041985')) klasRole = true
-    if(member.roles.find(role => role.id === '689809152972685334')) klasRole = true
+    if(member.roles.cache.find(role => role.id === '689809587754631243')) klasRole = true
+    if(member.roles.cache.find(role => role.id === '689809540723900438')) klasRole = true
+    if(member.roles.cache.find(role => role.id === '689809498571014164')) klasRole = true
+    if(member.roles.cache.find(role => role.id === '689809457965826180')) klasRole = true
+    if(member.roles.cache.find(role => role.id === '689809327913041985')) klasRole = true
+    if(member.roles.cache.find(role => role.id === '689809152972685334')) klasRole = true
     if(!klasRole)  {
       user.send("Je hebt geen klas geselecteerd")
       return
     }
 
     var keuzevakRole = 0
-    if(member.roles.find(role => role.id === '689781092240064524')) ++keuzevakRole
-    if(member.roles.find(role => role.id === '689780398976401408')) ++keuzevakRole
-    if(member.roles.find(role => role.id === '689781028826775583')) ++keuzevakRole
-    if(member.roles.find(role => role.id === '689779837992566857')) ++keuzevakRole
-    if(member.roles.find(role => role.id === '689780952532385803')) ++keuzevakRole
-    if(member.roles.find(role => role.id === '689780212006649883')) ++keuzevakRole
-    if(member.roles.find(role => role.id === '689779589379391517')) ++keuzevakRole
-    if(member.roles.find(role => role.id === '689779245500858533')) ++keuzevakRole
-    if(member.roles.find(role => role.id === '689779769251987468')) ++keuzevakRole
-    if(member.roles.find(role => role.id === '689812749491896487')) ++keuzevakRole
-    if(member.roles.find(role => role.id === '689780253094183051')) ++keuzevakRole
-    if(member.roles.find(role => role.id === '689780321448886272')) ++keuzevakRole
-    if(member.roles.find(role => role.id === '689781754910736391')) ++keuzevakRole
-    if(member.roles.find(role => role.id === '689781935073001487')) ++keuzevakRole
-    if(member.roles.find(role => role.id === '689781256300265503')) ++keuzevakRole
-    if(member.roles.find(role => role.id === '689779509393752064')) ++keuzevakRole
+    if(member.roles.cache.find(role => role.id === '689781092240064524')) ++keuzevakRole
+    if(member.roles.cache.find(role => role.id === '689780398976401408')) ++keuzevakRole
+    if(member.roles.cache.find(role => role.id === '689781028826775583')) ++keuzevakRole
+    if(member.roles.cache.find(role => role.id === '689779837992566857')) ++keuzevakRole
+    if(member.roles.cache.find(role => role.id === '689780952532385803')) ++keuzevakRole
+    if(member.roles.cache.find(role => role.id === '689780212006649883')) ++keuzevakRole
+    if(member.roles.cache.find(role => role.id === '689779589379391517')) ++keuzevakRole
+    if(member.roles.cache.find(role => role.id === '689779245500858533')) ++keuzevakRole
+    if(member.roles.cache.find(role => role.id === '689779769251987468')) ++keuzevakRole
+    if(member.roles.cache.find(role => role.id === '689812749491896487')) ++keuzevakRole
+    if(member.roles.cache.find(role => role.id === '689780253094183051')) ++keuzevakRole
+    if(member.roles.cache.find(role => role.id === '689780321448886272')) ++keuzevakRole
+    if(member.roles.cache.find(role => role.id === '689781754910736391')) ++keuzevakRole
+    if(member.roles.cache.find(role => role.id === '689781935073001487')) ++keuzevakRole
+    if(member.roles.cache.find(role => role.id === '689781256300265503')) ++keuzevakRole
+    if(member.roles.cache.find(role => role.id === '689779509393752064')) ++keuzevakRole
     if(keuzevakRole < 3) {
       user.send("Je hebt geen keuzevakken geselecteerd")
       return
     }
   }
 
-  var role = messageReaction.message.guild.roles.find(role => role.id === '690525990144966716')
+  var role = messageReaction.message.guild.roles.cache.find(role => role.id === '690525990144966716')
   if(role) {
     if(member) {
-      member.removeRole(role.id)
+      member.roles.remove(role.id)
       return
     }
   }
@@ -114,10 +116,10 @@ bot.on('messageReactionAdd', (messageReaction, user) => {
 bot.on('raw', event => {
   if(event.t === 'MESSAGE_REACTION_ADD') {
     if(!event.d.channel_id === logChannel) return
-    if(bot.channels.get(event.d.channel_id).messages.has(event.d.message_id)) return
+    if(bot.channels.cache.get(event.d.channel_id).messages.cache.has(event.d.message_id)) return
     else {
-      bot.channels.get(event.d.channel_id).fetchMessage(event.d.message_id).then(msg => {
-        bot.emit('messageReactionAdd', msg.reactions.get(event.d.emoji.name), bot.users.get(event.d.user_id))
+      bot.channels.cache.get(event.d.channel_id).messages.fetch(event.d.message_id).then(msg => {
+        bot.emit('messageReactionAdd', msg.reactions.cache.get(event.d.emoji.name), bot.users.cache.get(event.d.user_id))
       }).catch(err => console.log(err))
     }
   }
@@ -168,7 +170,7 @@ function getChanIdFromMention(mention) {
 }
 
 async function del(message, args) {
-  if(!message.member.roles.cache.find(role => role.id === vvID) || !message.member.roles.cache.find(role => role.id in botMasterRoles) || !message.author.id in botMasters) return
+  if(!message.member.roles.cache.cache.find(role => role.id === vvID) || !message.member.roles.cache.cache.find(role => role.id in botMasterRoles) || !message.author.id in botMasters) return
   const fetched = await message.channel.messages.fetch()
   if(args.length == 1) {
     message.channel.send("Please add how many messages you want to delete! ("+prefix+"delete [int|all] )")
@@ -291,4 +293,5 @@ function settings(args, message) {
   }
 }
 
+//bot.login(config.token)
 bot.login(process.env.TOKEN)

@@ -1,12 +1,11 @@
 const Discord = require('discord.js')
 const config = require('./config.json')
 const bot = new Discord.Client()
-var prefix = config.prefix
+var prefix = process.env.prefix
 var singleChannelId = ''
 var logChannel = ''
 var vvID = ''
-var ownerID = '151990643684540416'
-var botMasters = [ownerID]
+var botMasters = [process.env.ownerID]
 var botMasterRoles = []
 var overwrites = ["clear"]
 
@@ -292,4 +291,4 @@ function settings(args, message) {
   }
 }
 
-bot.login(config.token)
+bot.login(process.env.TOKEN)

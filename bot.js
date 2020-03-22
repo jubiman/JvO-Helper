@@ -101,7 +101,7 @@ bot.on('messageReactionAdd', (messageReaction, user) => {
     }
   }
 
-  var role = messageReaction.message.guild.roles.find(role => role.id === '690525990144966716')
+  var role = messageReaction.message.guild.cache.roles.find(role => role.id === '690525990144966716')
   if(role) {
     if(member) {
       member.removeRole(role.id)

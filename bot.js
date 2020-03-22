@@ -170,7 +170,7 @@ function getChanIdFromMention(mention) {
 }
 
 async function del(message, args) {
-  if(!message.member.roles.cache.cache.find(role => role.id === vvID) || !message.member.roles.cache.cache.find(role => role.id in botMasterRoles) || !message.author.id in botMasters) return
+  if(!message.member.roles.cache.find(role => role.id === vvID) || !message.member.roles.cache.find(role => role.id in botMasterRoles) || !message.author.id in botMasters) return
   const fetched = await message.channel.messages.fetch()
   if(args.length == 1) {
     message.channel.send("Please add how many messages you want to delete! ("+prefix+"delete [int|all] )")

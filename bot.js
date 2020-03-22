@@ -1,23 +1,28 @@
 const Discord = require('discord.js')
+const config = require('./config.json')
 const bot = new Discord.Client()
-var prefix = process.env.prefix
+var prefix = config.prefix
 var singleChannelId = ''
-var rrChannelId = '689786890861281280'
-var logChannel = '689553063589052523'
+var logChannel = ''
+var vvID = ''
+var ownerID = '151990643684540416'
+var botMasters = [ownerID]
+var botMasterRoles = []
+var overwrites = ["clear"]
 
 
 bot.on('ready', () => {
   console.log("Connected as: " + bot.user.tag)
   bot.user.setActivity("Administering JvO Discord")
-  console.log(`Bot has started, with ${bot.users.size} users, in ${bot.channels.size} channels of ${bot.guilds.size} guilds.`); 
-  bot.guilds.forEach((guild) => {
+  console.log(`Bot has started, with ${bot.users.cache.size} users, in ${bot.channels.cache.size} channels of ${bot.guilds.cache.size} guilds.`); 
+  bot.guilds.cache.forEach((guild) => {
     console.log("Connected to: "+ guild.name)
   })
 })
 
 bot.on('message', (message) => {
   if(message.author == bot.user) return
-  if(singleChannelId != "") {
+  if(singleChannelId != "" && !message.content.substr(prefix.length).split(' ') in overwrites) {
     if(message.channel.id != singleChannelId) return
   }
   if(message.content.startsWith(prefix)) {
@@ -119,18 +124,6 @@ bot.on('raw', event => {
   }
 })
 
-const helpEmbed = new Discord.RichEmbed()
-  .setColor('#0099ff')
-  .setTitle('Commands list')
-  .setAuthor('Jvo helper', 'https://gymnasiumamersfoort.nl/wp-content/uploads/2016/08/JvO.png')
-  .setDescription('[] means required, {} means optional, | means or.\nDon\'t include these.')
-  .setThumbnail('https://gymnasiumamersfoort.nl/wp-content/uploads/2016/08/JvO.png')
-  .addField(prefix+'help', 'This command')
-  .addField(prefix+'settings [setting] {args}', 'Change the bot\'s configuration')
-  .addField(prefix+'clear|delete [int|all]', 'Clear (x) amount of messages (max = 100)')
-  .setFooter('By Jubiman', 'https://gymnasiumamersfoort.nl/wp-content/uploads/2016/08/JvO.png');
-
-
 function getUserFromMention(mention) {
 	if (!mention) return
 	if (mention.startsWith('<@') && mention.endsWith('>')) {
@@ -138,7 +131,7 @@ function getUserFromMention(mention) {
 		if (mention.startsWith('!')) {
 			mention = mention.slice(1)
 		}
-		return bot.users.get(mention)
+		return bot.users.cache.get(mention)
 	}
 }
 
@@ -153,10 +146,20 @@ function getIdFromMention(mention) {
 	}
 }
 
+function getRoleFromMention(mention) {
+	if (!mention) return
+	if (mention.startsWith('<@&') && mention.endsWith('>')) return bot.roles.cache.get(mention.slice(3, -1))
+}
+
+function getRoleIdFromMention(mention) {
+	if (!mention) return
+	if (mention.startsWith('<@&') && mention.endsWith('>')) return mention.slice(3, -1)
+}
+
 function getChanFromMention(mention) {
 	if (!mention) return
 	if (mention.startsWith('<#') && mention.endsWith('>'))
-		return bot.channels.get(mention.slice(2, -1))
+		return bot.channels.cache.get(mention.slice(2, -1))
 }
 
 function getChanIdFromMention(mention) {
@@ -165,28 +168,57 @@ function getChanIdFromMention(mention) {
 		return mention.slice(2, -1).toString()
 }
 
-function del(message, args) {
+async function del(message, args) {
+  if(!message.member.roles.cache.find(role => role.id === vvID) || !message.member.roles.cache.find(role => role.id in botMasterRoles) || !message.author.id in botMasters) return
+  const fetched = await message.channel.messages.fetch()
   if(args.length == 1) {
     message.channel.send("Please add how many messages you want to delete! ("+prefix+"delete [int|all] )")
   } else if(args[1] == "all" || args[1] == "ALL") {
-    async function clear() {
-      message.delete()
-      const fetched = await message.channel.fetchMessages({limit: 100})
-      message.channel.bulkDelete(fetched)
-    }
-    clear()
+    message.delete()
+    message.channel.bulkDelete(fetched)
   } else if(parseInt(args[1]) < 100) {
     message.channel.bulkDelete(parseInt(args[1])+1)
-  } else {
+  } else if(parseInt(args[1]) == 100) {
     message.channel.bulkDelete(parseInt(args[1]))
+  } else {
+    message.channel.send("You may only remove up to 100 messages at a time")
+    return
   }
+  message.channel.send(`Removed ${args[1]} messages`).then(msg => {
+    msg.delete(3000)
+  })
 }
 
 function help(args, message) {
   if(args.length == 1) {
-    message.channel.send(helpEmbed)
-  } 
-  else {
+    message.channel.send(new Discord.MessageEmbed()
+                                .setColor('#0099ff')
+                                .setTitle('Commands list')
+                                .setAuthor('Jvo helper', 'https://gymnasiumamersfoort.nl/wp-content/uploads/2016/08/JvO.png')
+                                .setDescription('[] means required, {} means optional, | means or.\nDon\'t include these.')
+                                .setThumbnail('https://gymnasiumamersfoort.nl/wp-content/uploads/2016/08/JvO.png')
+                                .addField(prefix+'help', 'This command')
+                                .addField(prefix+'settings [setting] {args}', 'Change the bot\'s configuration')
+                                .addField(prefix+'clear|delete [int|all]', 'Clear (x) amount of messages (max = 100)')
+                                .setTimestamp()
+                                .setFooter('By Jubiman', 'https://gymnasiumamersfoort.nl/wp-content/uploads/2016/08/JvO.png')
+    )
+  } else if(args[1] == "settings") {
+    message.channel.send(new Discord.MessageEmbed()
+                                .setColor('#0099ff')
+                                .setTitle('Settings list')
+                                .setAuthor('Jvo helper', 'https://gymnasiumamersfoort.nl/wp-content/uploads/2016/08/JvO.png')
+                                .setDescription('[] means required, {} means optional, | means or.\nDon\'t include these.')
+                                .setThumbnail('https://gymnasiumamersfoort.nl/wp-content/uploads/2016/08/JvO.png')
+                                .addField(`${prefix}settings prefix [newPrefix]`, 'Change the bot\'s prefix')
+                                .addField(`${prefix}settings channel [channelMention]`, `Make the bot only listen on one channel, overwrites are: ${prefix}clear`)
+                                .addField(`${prefix}settings listChannel [channelMention]`, 'Set channel for bot\'s reaction role listening')
+                                .addField(`${prefix}settings botMaster [userMention]`, 'Set bot master user')
+                                .addField(`${prefix}settings botMasterRole [roleMention] (seperate with ' ' (space))`, 'Set bot master role(s)')
+                                .setTimestamp()
+                                .setFooter('By Jubiman', 'https://gymnasiumamersfoort.nl/wp-content/uploads/2016/08/JvO.png')
+    )
+  }  else {
     message.channel.send("Coming soon...")
   }
 }
@@ -216,7 +248,7 @@ function settings(args, message) {
         message.channel.send(`The bot is now listening on ${getChanFromMention(args[2])}`)
         return
       }
-      case "logChannel": {
+      case "listChannel": {
         if(args.length < 2 || args[2] == "this") {
           logChannel = message.channel.id.toString()
         } else if(args.length >= 3) {
@@ -230,14 +262,34 @@ function settings(args, message) {
         message.channel.send(`The bot is now listening on ${getChanFromMention(args[2])}`)
         return
       }
-      case "emoji": {
+      case "botMasterRole": {
+        if(args.length < 2) {
+          message.channel.send("Please add a role that should be bot master.")
+          return
+        }
+        let args2 = ''
+        for(i = 2; i<args.length; ++i) {
+          botMasterRoles.push(getRoleIdFromMention(args[i]))
+          args2 += args[i] + " "
+        }
+        message.channel.send(`Added ${args2.substr(0, args2.length-1)} to the bot master roles`)
         return
       }
-      case "emojis": {
+      case "botMaster": {
+        if(args.length < 2) {
+          message.channel.send("Please add a mention that should be bot master.")
+          return
+        }
+        let args2 = ""
+        for(i = 2; i<args.length; ++i) {
+          botMasterRoles.push(getIdFromMention(args[i]))
+          args2 += args[i] + " "
+        }
+        message.channel.send(`Added ${args2.substr(0, args2.length-1)} to the bot master roles`)
         return
       }
     }
   }
 }
 
-bot.login(process.env.TOKEN)
+bot.login(config.token)

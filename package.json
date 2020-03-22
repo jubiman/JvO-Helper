@@ -1,17 +1,14 @@
 {
   "name": "jvo-helper",
   "version": "1.0.0",
+  "description": "",
   "main": "bot.js",
-  "dependencies": {
-    "discord.js": "^12.0.2"
-  },
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node bot.js"
   },
   "author": "jubiman",
   "license": "ISC",
-  "keywords": [],
-  "description": ""
+  "dependencies": {
+    "discord.js": "^12.0.2"
+  }
 }

@@ -33,7 +33,6 @@ bot.on('message', (message) => {
 
 function processCmd(message) {
   const args = message.content.substr(prefix.length).split(' ')
-  console.log(args)
   switch(args[0]) {
     case 'help': {
       help(args, message)
@@ -252,9 +251,9 @@ function settings(args, message) {
         if(args.length < 2 || args[2] == "this") {
           singleChannelId = message.channel.id.toString()
         } else if(args.length == 3 && args[2] != "this") {
-          if(!message.mentions.channels.first()) {
+          if(!message.mentions.cache.channels.cache.first()) {
             bot.channels.get(args[2])
-            console.log("Please add a mention a channel for me to log.")
+            message.channel.send("Please add a mention a channel for me to log.")
           } else {
             singleChannelId = getChanIdFromMention(args[2])
           }
@@ -268,7 +267,7 @@ function settings(args, message) {
         } else if(args.length >= 3) {
           if(!message.mentions.channels.first()) {
             bot.channels.get(args[2])
-            console.log("Please add a mention a channel for me to log.")
+            message.channel.send("Please add a mention a channel for me to log.")
           } else {
             logChannel = getChanIdFromMention(args[2])
           }

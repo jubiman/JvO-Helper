@@ -309,8 +309,4 @@ function settings(args, message) {
 }
 
 //bot.login(config.token)
-<<<<<<< HEAD
 bot.login(process.env.TOKEN)
-=======
-bot.login(process.env.TOKEN)
->>>>>>> f1577367443bab2de13489d9f1e2d7bfff30e6af

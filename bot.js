@@ -33,6 +33,7 @@ bot.on('message', (message) => {
 
 function processCmd(message) {
   const args = message.content.substr(prefix.length).split(' ')
+  console.log(args)
   switch(args[0]) {
     case 'help': {
       help(args, message)
@@ -308,4 +309,8 @@ function settings(args, message) {
 }
 
 //bot.login(config.token)
+<<<<<<< HEAD
 bot.login(process.env.TOKEN)
+=======
+bot.login(process.env.TOKEN)
+>>>>>>> f1577367443bab2de13489d9f1e2d7bfff30e6af

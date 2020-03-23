@@ -2,12 +2,12 @@ const Discord = require('discord.js')
 //const config = require('./config.json')
 const bot = new Discord.Client()
 var prefix = process.env.prefix
-//var prefix = config.prefixv
+//var prefix = config.prefix
 var singleChannelId = ''
 var logChannel = '689773741047414815'
 var vvID = ''
-var botMasters = [process.env.ownerID]
-//var botMasters = [config.ownerid]
+var botMasters = [].push(process.env.ownerID)
+//var botMasters = [].push('151990643684540416')
 var botMasterRoles = []
 var overwrites = ["clear"]
 
@@ -23,7 +23,7 @@ bot.on('ready', () => {
 
 bot.on('message', (message) => {
   if(message.author == bot.user) return
-  if(singleChannelId != "" && !message.content.substr(prefix.length).split(' ') in overwrites) {
+  if(singleChannelId != "" && overwrites.indexOf(message.content.substr(prefix.length).split(' ')) == -1) {
     if(message.channel.id != singleChannelId) return
   }
   if(message.content.startsWith(prefix)) {
@@ -33,20 +33,21 @@ bot.on('message', (message) => {
 
 function processCmd(message) {
   const args = message.content.substr(prefix.length).split(' ')
+  console.log(args)
   switch(args[0]) {
-    case "help": {
+    case 'help': {
       help(args, message)
       return
     }
-    case "settings": {
+    case 'settings': {
       settings(args, message)
       return
     }
-    case "delete": {
+    case 'delete': {
       del(message, args)
       return
     }
-    case "clear": {
+    case 'clear': {
       del(message, args)
       return
     }
@@ -169,9 +170,21 @@ function getChanIdFromMention(mention) {
 		return mention.slice(2, -1).toString()
 }
 
-async function del(message, args) {
-  if(!message.member.roles.cache.find(role => role.id === vvID) || !message.member.roles.cache.find(role => role.id in botMasterRoles) || !message.author.id in botMasters) return
-  const fetched = await message.channel.messages.fetch()
+function getRoleFromID(id, guildID) {
+	if (!id) return
+	return bot.guilds.cache.get(guildID).roles.cache.get(id)
+}
+
+function del(message, args) {
+  let hasAccess = false
+  for(i = 0; i < botMasterRoles.length; ++i) {
+    if(message.member.roles.cache.has(botMasterRoles[i])) hasAccess = true
+  }
+  if(!hasAccess)
+    for(i = 0; i < botMasters.length; ++i)
+      if(message.author.id === botMasters[i]) hasAccess = true
+  if(!hasAccess) return
+  const fetched = message.channel.messages.fetch()
   if(args.length == 1) {
     message.channel.send("Please add how many messages you want to delete! ("+prefix+"delete [int|all] )")
   } else if(args[1] == "all" || args[1] == "ALL") {
@@ -186,7 +199,7 @@ async function del(message, args) {
     return
   }
   message.channel.send(`Removed ${args[1]} messages`).then(msg => {
-    msg.delete(3000)
+    msg.delete({'timeout': 5000})
   })
 }
 
@@ -270,6 +283,7 @@ function settings(args, message) {
         }
         let args2 = ''
         for(i = 2; i<args.length; ++i) {
+          if(botMasterRoles.includes(getRoleIdFromMention(args[i]))) continue
           botMasterRoles.push(getRoleIdFromMention(args[i]))
           args2 += args[i] + " "
         }
@@ -283,6 +297,7 @@ function settings(args, message) {
         }
         let args2 = ""
         for(i = 2; i<args.length; ++i) {
+          if(botMasterRoles.includes(getRoleIdFromMention(args[i]))) continue
           botMasterRoles.push(getIdFromMention(args[i]))
           args2 += args[i] + " "
         }

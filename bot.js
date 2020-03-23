@@ -1,20 +1,20 @@
 const Discord = require('discord.js')
-//const config = require('./config.json')
+const config = require('./config.json')
 const bot = new Discord.Client()
-var prefix = process.env.prefix
-//var prefix = config.prefix
+//var prefix = process.env.prefix
+var prefix = config.prefix
 var singleChannelId = ''
 var logChannel = '689773741047414815'
 var vvID = ''
-var botMasters = [].push(process.env.ownerID)
-//var botMasters = [].push('151990643684540416')
+//var botMasters = [].push(process.env.ownerID)
+var botMasters = [].push('151990643684540416')
 var botMasterRoles = []
 var overwrites = ["clear"]
 
 
 bot.on('ready', () => {
   console.log("Connected as: " + bot.user.tag)
-  bot.user.setActivity("Administering JvO Discord")
+  bot.user.setActivity("JvO Discord", {type: 'WATCHING'})
   console.log(`Bot has started, with ${bot.users.cache.size} users, in ${bot.channels.cache.size} channels of ${bot.guilds.cache.size} guilds.`); 
   bot.guilds.cache.forEach((guild) => {
     console.log("Connected to: "+ guild.name)
@@ -308,5 +308,5 @@ function settings(args, message) {
   }
 }
 
-//bot.login(config.token)
-bot.login(process.env.TOKEN)
+bot.login(config.token)
+//bot.login(process.env.TOKEN)

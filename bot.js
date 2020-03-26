@@ -5,7 +5,6 @@ var prefix = process.env.prefix
 //var prefix = config.prefix
 var singleChannelId = ''
 var logChannel = '689773741047414815'
-var vvID = ''
 var botMasters = [].push(process.env.ownerID)
 //var botMasters = [].push('151990643684540416')
 var botMasterRoles = []
@@ -33,7 +32,6 @@ bot.on('message', (message) => {
 
 function processCmd(message) {
   const args = message.content.substr(prefix.length).split(' ')
-  console.log(args)
   switch(args[0]) {
     case 'help': {
       help(args, message)
@@ -51,7 +49,27 @@ function processCmd(message) {
       del(message, args)
       return
     }
+    case 'set': {
+      setChan(message, args)
+      return
+    }
   }
+}
+
+function setChan(message, args) {
+  if(message.channel.parentID != '689878518267379944') return // Change to leerPleinCat
+  if(message.member.voice.channel.name.split(' ')[0] != 'Tafel') return
+  
+  if(args.length == 1) {
+    message.member.voice.channel.setName(message.member.voice.channel.name.substr(0,8))
+    return
+  }
+  
+  let name = ""
+  for(i = 1; i < args.length; ++i) {
+    name += args[i] + " "
+  }
+  message.member.voice.channel.setName(message.member.voice.channel.name.substr(0,8) + " | " + name)
 }
 
 bot.on('messageReactionAdd', (messageReaction, user) => {

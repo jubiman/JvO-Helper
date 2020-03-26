@@ -57,7 +57,7 @@ function processCmd(message) {
 }
 
 function setChan(message, args) {
-  if(message.channel.parentID != '689878518267379944') return // Change to leerPleinCat
+  if(message.channel.parentID != '689878518267379944') return
   if(message.member.voice.channel.name.split(' ')[0] != 'Tafel') return
   
   if(args.length == 1) {
@@ -232,6 +232,7 @@ function help(args, message) {
                                 .addField(prefix+'help', 'This command')
                                 .addField(prefix+'settings [setting] {args}', 'Change the bot\'s configuration')
                                 .addField(prefix+'clear|delete [int|all]', 'Clear (x) amount of messages (max = 100)')
+                                .addField(prefix+'set {name, leave blank to set to default}', 'Set new channel name to specify what you are working on. Only works in leerplein')
                                 .setTimestamp()
                                 .setFooter('By Jubiman', 'https://gymnasiumamersfoort.nl/wp-content/uploads/2016/08/JvO.png')
     )

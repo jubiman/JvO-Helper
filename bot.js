@@ -1,12 +1,12 @@
 const Discord = require('discord.js')
-//const config = require('./config.json')
+const config = require('./config.json')
 const bot = new Discord.Client()
-var prefix = process.env.prefix
-//var prefix = config.prefix
+//var prefix = process.env.prefix
+var prefix = config.prefix
 var singleChannelId = ''
 var logChannel = '689773741047414815'
-var botMasters = [].push(process.env.ownerID)
-//var botMasters = [].push('151990643684540416')
+//var botMasters = [].push(process.env.ownerID)
+var botMasters = [].push('151990643684540416')
 var botMasterRoles = []
 var overwrites = ["clear"]
 
@@ -57,11 +57,19 @@ function processCmd(message) {
 }
 
 function setChan(message, args) {
-  if(message.channel.parentID != '689878518267379944') return
+  if(message.channel.parentID != '689878518267379944' && message.channel.parentID != '689808353718960365') {
+    message.channel.send("Je heb het recht niet om dit kanaal aan te passen.")
+    return
+  }
+  if(!message.member.voice.channel) {
+    message.channel.send("Je moet in een spraak kanaal zitten om de naam ervan te veranderen.")
+    return
+  }
   if(message.member.voice.channel.name.split(' ')[0] != 'Tafel') return
   
   if(args.length == 1) {
     message.member.voice.channel.setName(message.member.voice.channel.name.substr(0,8))
+    message.delete()
     return
   }
   
@@ -70,7 +78,15 @@ function setChan(message, args) {
     name += args[i] + " "
   }
   message.member.voice.channel.setName(message.member.voice.channel.name.substr(0,8) + " | " + name)
+  message.delete()
 }
+
+bot.on('voiceStateUpdate', (oldState, newState) => {
+  //console.log("oldState: "); console.log(oldState); console.log("newState: "); console.log(newState)
+  if(newState.channelID === null) {
+    oldState.channel.name = oldState.channel.setName(oldState.channel.name.substr(0,8))
+  }
+})
 
 bot.on('messageReactionAdd', (messageReaction, user) => {
   if(!messageReaction.channel === logChannel) return
@@ -327,5 +343,5 @@ function settings(args, message) {
   }
 }
 
-//bot.login(config.token)
-bot.login(process.env.TOKEN)
+bot.login(config.token)
+//bot.login(process.env.TOKEN)

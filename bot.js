@@ -83,6 +83,7 @@ function setChan(message, args) {
 
 bot.on('voiceStateUpdate', (oldState, newState) => {
   //console.log("oldState: "); console.log(oldState); console.log("newState: "); console.log(newState)
+  if(oldState.channel.parentID != '689878518267379944' && oldState.channel.parentID != '689808353718960365') return
   if(newState.channelID === null) {
     if(oldState.channel.members.size == 0)
       oldState.channel.name = oldState.channel.setName(oldState.channel.name.substr(0,8))

@@ -1,12 +1,12 @@
 const Discord = require('discord.js')
-//const config = require('./config.json')
+const config = require('./config.json')
 const bot = new Discord.Client()
-var prefix = process.env.prefix
-//var prefix = config.prefix
+//var prefix = process.env.prefix
+var prefix = config.prefix
 var singleChannelId = ''
 var logChannel = '689773741047414815'
-var botMasters = [].push(process.env.ownerID)
-//var botMasters = [].push('151990643684540416')
+//var botMasters = [].push(process.env.ownerID)
+var botMasters = [].push('151990643684540416')
 var botMasterRoles = []
 var overwrites = ["clear"]
 
@@ -224,8 +224,17 @@ function del(message, args) {
   if(args.length == 1) {
     message.channel.send("Please add how many messages you want to delete! ("+prefix+"delete [int|all] )")
   } else if(args[1] == "all" || args[1] == "ALL") {
-    message.delete()
-    message.channel.bulkDelete(fetched)
+    let brk = false
+    //while(brk == false) {
+      message.channel.messages.fetch({limit: 100}).then(msgs => {
+        console.log(msgs.size)
+        if(msgs.size != 0) {
+          message.channel.bulkDelete(100)
+        } else brk = true;
+      })
+    //}
+    //message.delete()
+    //message.channel.bulkDelete(fetched)
   } else if(parseInt(args[1]) < 100) {
     message.channel.bulkDelete(parseInt(args[1])+1)
   } else if(parseInt(args[1]) == 100) {
@@ -345,5 +354,5 @@ function settings(args, message) {
   }
 }
 
-//bot.login(config.token)
-bot.login(process.env.TOKEN)
+bot.login(config.token)
+//bot.login(process.env.TOKEN)

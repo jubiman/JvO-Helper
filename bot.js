@@ -12,7 +12,8 @@ var overwrites = ["clear"]
 
 
 bot.on('ready', () => {
-  botMasterRoles.push('689576270333345905').push('689860365454147594')
+  botMasterRoles.push('689576270333345905')
+  botMasterRoles.push('689860365454147594')
   console.log("Connected as: " + bot.user.tag)
   bot.user.setActivity("JvO Discord", {type: 'WATCHING'})
   console.log(`Bot has started, with ${bot.users.cache.size} users, in ${bot.channels.cache.size} channels of ${bot.guilds.cache.size} guilds.`); 

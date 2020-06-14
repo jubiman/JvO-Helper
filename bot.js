@@ -31,8 +31,8 @@ bot.on('message', (message) => {
     processCmd(message)
   }
   if(message.channel.parentID == '689878518267379944' || message.channel.parentID == '689808353718960365') {
-    message.delete({'timeout': 5000})
-}
+    message.delete()
+  }
 })
 
 function processCmd(message) {

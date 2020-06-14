@@ -30,6 +30,9 @@ bot.on('message', (message) => {
   if(message.content.startsWith(prefix)) {
     processCmd(message)
   }
+  if(message.channel.parentID == '689878518267379944' || message.channel.parentID == '689808353718960365') {
+    message.delete({'timeout': 5000})
+}
 })
 
 function processCmd(message) {
@@ -60,10 +63,7 @@ function processCmd(message) {
 
 function setChan(message, args) {
   if(message.channel.parentID != '689878518267379944' && message.channel.parentID != '689808353718960365') {
-    message.channel.send("Je heb het recht niet om dit kanaal aan te passen.").then(msg => {
-      message.delete({'timeout': 5000})
-      msg.delete({'timeout': 5000})
-    })
+    message.channel.send("Je heb het recht niet om dit kanaal aan te passen.")
     return
   }
   if(!message.member.voice.channel) {

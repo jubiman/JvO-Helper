@@ -60,11 +60,17 @@ function processCmd(message) {
 
 function setChan(message, args) {
   if(message.channel.parentID != '689878518267379944' && message.channel.parentID != '689808353718960365') {
-    message.channel.send("Je heb het recht niet om dit kanaal aan te passen.")
+    message.channel.send("Je heb het recht niet om dit kanaal aan te passen.").then(msg => {
+      message.delete({'timeout': 5000})
+      msg.delete({'timeout': 5000})
+    })
     return
   }
   if(!message.member.voice.channel) {
-    message.channel.send("Je moet in een spraak kanaal zitten om de naam ervan te veranderen.")
+    message.channel.send("Je moet in een spraak kanaal zitten om de naam ervan te veranderen.").then(msg => {
+      message.delete({'timeout': 5000})
+      msg.delete({'timeout': 5000})
+    })
     return
   }
   if(message.member.voice.channel.name.split(' ')[0] != 'Tafel') return

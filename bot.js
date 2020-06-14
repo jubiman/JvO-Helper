@@ -30,7 +30,7 @@ bot.on('message', (message) => {
   if(message.content.startsWith(prefix)) {
     processCmd(message)
   }
-  if(message.channel.parentID == '689878518267379944' || message.channel.parentID == '689808353718960365') {
+  if(message.channel.parentID == '689878518267379944') {
     message.delete()
   }
 })
